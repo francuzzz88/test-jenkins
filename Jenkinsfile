@@ -8,5 +8,21 @@ pipeline {
                 }
             }
         }
+
+        stage('test'){
+            steps{
+                withMaven(maven: 'maven_3_8_3'){
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Deploy'){
+            steps{
+                withMaven(maven: 'maven_3_8_3'){
+                    sh 'mvn deploy'
+                }
+            }
+        }
     }
 }
