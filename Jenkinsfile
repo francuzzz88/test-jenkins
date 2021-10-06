@@ -16,6 +16,13 @@ pipeline {
                 }
             }
         }
+        stage('install'){
+                    steps{
+                        withMaven(maven: 'maven_3.8.3'){
+                            sh 'mvn jar'
+                        }
+                    }
+                }
 
     }
 }
