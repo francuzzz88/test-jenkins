@@ -1,35 +1,19 @@
 pipeline {
-    agent any
+    agent none
     stages {
-        stage ('compile Stage') {
+        stage('Build') {
+            agent { docker 'maven:3.6.3-jdk-11' }
             steps {
-                withMaven(maven: 'maven') {
-                    sh 'mvn clean compile'
-                }
+                echo 'Hello, Maven'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
-
-        stage('test'){
-            steps{
-                withMaven(maven: 'maven'){
-                    sh 'mvn test'
-                }
+        stage('Run') {
+            agent { docker 'openjdk:11.0.7-jdk-slim' }
+            steps {
+                echo 'Hello, JDK'
+                sh 'java -jar target/demodocker-0.0.1-SNAPSHOT.jar'
             }
         }
-
-        stage('install'){
-            steps{
-                withMaven(maven: 'maven'){
-                    sh 'mvn package'
-                }
-            }
-        }
-
-        /* stage('docker_build'){
-            steps{
-                sh 'docker build -t francuzzz88/jenkins_test:0.1 .'
-            }
-        } */
-
     }
 }
